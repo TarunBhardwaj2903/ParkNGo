@@ -1,0 +1,173 @@
+
+{% extends "base.html" %}
+{% block title %}Admin Dashboard{% endblock %}
+{% block content %}
+<h2>Admin Dashboard</h2>
+
+<h4>Add Parking Lot</h4>
+<form method="POST" action="{{ url_for('admin_bp.add_lot') }}" class="row g-3">
+  <div class="col-md-3">
+    <input type="text" name="name" placeholder="Lot Name" class="form-control" required>
+  </div>
+  <div class="col-md-3">
+    <input type="text" name="address" placeholder="Address" class="form-control" required>
+  </div>
+  <div class="col-md-2">
+    <input type="text" name="pin_code" placeholder="PIN" class="form-control" required>
+  </div>
+  <div class="col-md-2">
+    <input type="number" step="0.01" name="price" placeholder="Price/hr" class="form-control" required>
+  </div>
+  <div class="col-md-2">
+    <input type="number" name="max_spots" placeholder="Spots" class="form-control" required>
+  </div>
+  <div class="col-12">
+    <button type="submit" class="btn btn-primary">Add Lot</button>
+  </div>
+</form>
+
+<hr>
+<h4>Parking Lots</h4>
+<table class="table table-bordered">
+  <thead>
+    <tr>
+      <th>ID</th><th>Name</th><th>Address</th><th>Price/hr</th><th>Spots</th><th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for lot in lots %}
+    <tr>
+      <td>{{ lot[0] }}</td>
+      <td>{{ lot[1] }}</td>
+      <td>{{ lot[2] }}</td>
+      <td>{{ lot[4] }}</td>
+      <td>{{ lot[5] }}</td>
+      <td>
+        <a href="{{ url_for('admin_bp.view_lot', lot_id=lot[0]) }}" class="btn btn-sm btn-info">View</a>
+        <a href="{{ url_for('admin_bp.delete_lot_view', lot_id=lot[0]) }}" class="btn btn-sm btn-danger">Delete</a>
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+<hr>
+<h4>Registered Users</h4>
+<ul>
+  {% for user in users %}
+  <li>{{ user[1] }} ({{ user[2] }})</li>
+  {% endfor %}
+</ul>
+
+<hr>
+<h4>Analytics</h4>
+
+<div class="row">
+  <div class="col-md-6">
+    <canvas id="lotUsageChart"></canvas>
+  </div>
+  <div class="col-md-6">
+    <canvas id="bookingTrendChart"></canvas>
+  </div>
+</div>
+<!-- new code  -->
+<!-- <div class="row mt-4">
+  <div class="col-md-12">
+    <canvas id="dailyBookingChart"></canvas>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+  const lotUsageData = {
+    labels: {{ lot_usage | map(attribute = 0) | list | tojson }},
+  datasets: [{
+    label: 'Occupied Spots',
+    data: {{ lot_usage | map(attribute = 2) | list | tojson }},
+    backgroundColor: 'rgba(255, 99, 132, 0.6)'
+    }, {
+    label: 'Total Spots',
+    data: {{ lot_usage | map(attribute = 1) | list | tojson }},
+    backgroundColor: 'rgba(54, 162, 235, 0.6)'
+    }]
+  };
+
+  new Chart(document.getElementById('lotUsageChart'), {
+    type: 'bar',
+    data: lotUsageData,
+    options: {
+      responsive: true,
+      plugins: {
+        title: {
+          display: true,
+          text: 'Parking Lot Usage'
+        }
+      }
+    }
+  });
+
+  const bookingTrendData = {
+    labels: {{ monthly_bookings | map(attribute = 0) | list | tojson }},
+  datasets: [{
+    label: 'Bookings per Month',
+    data: {{ monthly_bookings | map(attribute = 1) | list | tojson }},
+    backgroundColor: 'rgba(75, 192, 192, 0.6)'
+    }]
+  };
+
+  new Chart(document.getElementById('bookingTrendChart'), {
+    type: 'line',
+    data: bookingTrendData,
+    options: {
+      responsive: true,
+      plugins: {
+        title: {
+          display: true,
+          text: 'Monthly Booking Trends'
+        }
+      }
+    }
+  });
+  
+  const dailyBookingData = {
+    labels: {{ daily_bookings | map(attribute = 0) | list | tojson }},
+    datasets: [{
+      label: 'Bookings per Day',
+      data: {{ daily_bookings | map(attribute = 1) | list | tojson }},
+      backgroundColor: 'rgba(255, 206, 86, 0.6)',
+      borderColor: 'rgba(255, 206, 86, 1)',
+      borderWidth: 1
+    }]
+  };
+
+  new Chart(document.getElementById('dailyBookingChart'), {
+    type: 'bar',
+    data: dailyBookingData,
+    options: {
+      responsive: true,
+      plugins: {
+        title: {
+          display: true,
+          text: 'Daily Booking Trends'
+        }
+      },
+      scales: {
+        x: {
+          title: {
+            display: true,
+            text: 'Date'
+          }
+        },
+        y: {
+          beginAtZero: true,
+          title: {
+            display: true,
+            text: 'Number of Bookings'
+          }
+        }
+      }
+    }
+  }); 
+</script>-->
+
+{% endblock %} 

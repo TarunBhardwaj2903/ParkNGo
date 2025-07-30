@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% block title %}User Dashboard{% endblock %}
+{% block content %}
+<h2>User Dashboard</h2>
+
+<h4>Book Parking Spot</h4>
+<form method="POST" action="{{ url_for('user_bp.book') }}" class="row g-3">
+  <div class="col-md-4">
+    <select name="lot_id" class="form-select" required>
+      {% for lot in lots %}
+      <option value="{{ lot[0] }}">{{ lot[1] }} - ₹{{ lot[4] }}/hr</option>
+      {% endfor %}
+    </select>
+  </div>
+  <div class="col-md-4">
+    <input type="text" name="vehicle_number" placeholder="Vehicle Number" class="form-control" required>
+  </div>
+  <div class="col-md-4">
+    <button type="submit" class="btn btn-primary">Book Spot</button>
+  </div>
+</form>
+
+<hr>
+<h4>Your Bookings</h4>
+<table class="table table-bordered">
+  <thead>
+    <tr>
+      <th>Booking ID</th><th>Spot ID</th><th>Vehicle</th><th>Start</th><th>End</th><th>Cost</th><th>Action</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for b in bookings %}
+    <tr>
+      <td>{{ b[0] }}</td>
+      <td>{{ b[1] }}</td>
+      <td>{{ b[2] }}</td>
+      <td>{{ b[3] }}</td>
+      <td>{{ b[4] or "Active" }}</td>
+      <td>{{ b[5] or "-" }}</td>
+      <td>
+        {% if not b[4] %}
+          <a href="{{ url_for('user_bp.release', booking_id=b[0]) }}" class="btn btn-sm btn-warning">Release</a>
+        {% else %}
+          -
+        {% endif %}
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

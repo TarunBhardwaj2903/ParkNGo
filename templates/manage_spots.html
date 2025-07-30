@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block title %}Manage Spots{% endblock %}
+{% block content %}
+<h2>Spots for Lot ID: {{ lot_id }}</h2>
+
+<table class="table table-bordered">
+  <thead>
+    <tr>
+      <th>Spot ID</th><th>Status</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for spot in spots %}
+    <tr>
+      <td>{{ spot[0] }}</td>
+      <td>
+        {% if spot[2] == 'A' %}
+          <span class="badge bg-success">Available</span>
+        {% else %}
+          <span class="badge bg-danger">Occupied</span>
+        {% endif %}
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+<a href="{{ url_for('admin_bp.dashboard') }}" class="btn btn-secondary">Back</a>
+{% endblock %}
